@@ -3,6 +3,12 @@ package org.example.usermanagement.account.presentation;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+// Requested data for creating an account can be made strict, so no additional data can be added,
+// but I wanted to keep it simple.
+// It doesn't change the way the application is working but can make life easier for
+// frontend developers and can save time on debugging.
+
+
 @Data
 @Builder
 @AllArgsConstructor

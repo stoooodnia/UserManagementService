@@ -2,7 +2,6 @@ package org.example.usermanagement.account.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.example.usermanagement.account.domain.Account;
 import org.example.usermanagement.account.service.AccountServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +60,8 @@ public class AccountController {
         }
     }
 
+
+    // This is a global exception handler for validation errors just for making the response prettier :>
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -72,7 +73,7 @@ public class AccountController {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @PutMapping("/{id}") ResponseEntity<AccountResponse> put (
+    @PatchMapping("/{id}") ResponseEntity<AccountResponse> put (
             @PathVariable UUID id,
             @Valid
             @RequestBody AccountUpdateRequest updateRequest
@@ -99,6 +100,8 @@ public class AccountController {
     {
         try {
             accountService.delete(id);
+            // could return ok with deleted entity but choose to stay with noContent.
+            // as in update, it depends on convention.
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
