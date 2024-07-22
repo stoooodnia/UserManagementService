@@ -49,8 +49,7 @@ public class AccountServiceImpl implements IAccountService {
 
         // Update account
         Optional<Account> optional = accountRepository.findById(id);
-        System.out.println(id);
-        System.out.println(optional);
+
         if (optional.isEmpty()) {
             return this.create(newAccount);
         }
