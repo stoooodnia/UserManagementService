@@ -37,9 +37,10 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
-        // Delete account by id
-
+        accountRepository.findById(id).orElseThrow();
+        accountRepository.deleteById(id);
     }
 
     @Override

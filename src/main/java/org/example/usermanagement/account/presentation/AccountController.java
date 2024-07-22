@@ -75,22 +75,27 @@ public class AccountController {
     ) {
         Account account = accountService.update(id, accountRequest);
 
-        AccountResponse response = AccountResponse.builder()
-                .id(String.valueOf(account.getId()))
-                .username(account.getUsername())
-                .gender(account.getGender().name())
-                .age(account.getAge())
-                .createdAt(account.getCreatedAt().toString())
-                .build();
-
         if (account.getId() != id) {
-            UUID updatedId = account.getId();
-            return ResponseEntity.created(URI.create("/accounts/" + account.getId())).build();
+            AccountResponse response = AccountResponse.builder()
+                    .id(String.valueOf(account.getId()))
+                    .username(account.getUsername())
+                    .gender(account.getGender().name())
+                    .age(account.getAge())
+                    .createdAt(account.getCreatedAt().toString())
+                    .build();
+            return ResponseEntity.created(URI.create("/accounts/" + account.getId())).body(response);
         }
         return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}") ResponseEntity<Void> delete (
             @PathVariable UUID id
     )
-    {return null;}
+    {
+        try {
+            accountService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
