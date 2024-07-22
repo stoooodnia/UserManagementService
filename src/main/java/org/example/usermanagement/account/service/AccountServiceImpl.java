@@ -7,6 +7,7 @@ import org.example.usermanagement.account.domain.Gender;
 import org.example.usermanagement.account.infrastructure.IAccountRepository;
 import org.example.usermanagement.account.presentation.AccountRequest;
 import org.example.usermanagement.account.presentation.AccountResponse;
+import org.example.usermanagement.account.presentation.AccountUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -45,18 +46,17 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     @Transactional
-    public Account update(UUID id, AccountRequest newAccount) {
+    public Account update(UUID id, AccountUpdateRequest newAccount) {
 
         // Update account
-        Optional<Account> optional = accountRepository.findById(id);
+        Account a = accountRepository.findById(id).orElseThrow();
 
-        if (optional.isEmpty()) {
-            return this.create(newAccount);
+        if (newAccount.getAge() != null) {
+            a.setAge(newAccount.getAge());
         }
-        Account a = optional.get();
-        a.setUsername(newAccount.getUsername());
-        a.setAge(newAccount.getAge());
-        a.setGender(Gender.valueOf(newAccount.getGender()));
+        if (newAccount.getGender() != null) {
+                a.setGender(Gender.valueOf(newAccount.getGender()));
+        }
 
         return accountRepository.save(a);
     }

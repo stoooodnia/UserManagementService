@@ -46,15 +46,19 @@ public class AccountController {
             @Valid
             @RequestBody AccountRequest accountRequest
     ) {
-        Account account = accountService.create(accountRequest);
-        AccountResponse response = AccountResponse.builder()
-                .id(String.valueOf(account.getId()))
-                .username(account.getUsername())
-                .gender(account.getGender().name())
-                .age(account.getAge())
-                .createdAt(account.getCreatedAt().toString())
-                .build();
-        return ResponseEntity.created(URI.create("/accounts/" + account.getId())).body(response);
+        try {
+            Account account = accountService.create(accountRequest);
+            AccountResponse response = AccountResponse.builder()
+                    .id(String.valueOf(account.getId()))
+                    .username(account.getUsername())
+                    .gender(account.getGender().name())
+                    .age(account.getAge())
+                    .createdAt(account.getCreatedAt().toString())
+                    .build();
+            return ResponseEntity.created(URI.create("/accounts/" + account.getId())).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(409).build();
+        }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -71,11 +75,10 @@ public class AccountController {
     @PutMapping("/{id}") ResponseEntity<AccountResponse> put (
             @PathVariable UUID id,
             @Valid
-            @RequestBody AccountRequest accountRequest
+            @RequestBody AccountUpdateRequest updateRequest
     ) {
-        Account account = accountService.update(id, accountRequest);
-
-        if (account.getId() != id) {
+        try {
+            Account account = accountService.update(id, updateRequest);
             AccountResponse response = AccountResponse.builder()
                     .id(String.valueOf(account.getId()))
                     .username(account.getUsername())
@@ -83,9 +86,12 @@ public class AccountController {
                     .age(account.getAge())
                     .createdAt(account.getCreatedAt().toString())
                     .build();
-            return ResponseEntity.created(URI.create("/accounts/" + account.getId())).body(response);
+//            return ResponseEntity.noContent().build();  // generally update should return 204 noContent,
+            return ResponseEntity.ok(response); // but I choose a convention to make life easier for user, and return the updated resource
+                                                //  so that user don't need to make an additional request to get the updated resource
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/{id}") ResponseEntity<Void> delete (
             @PathVariable UUID id

@@ -20,6 +20,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(unique = true)
     private String username;
     @Enumerated(EnumType.STRING)
     private Gender gender;
