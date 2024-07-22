@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.usermanagement.account.domain.Account;
 import org.example.usermanagement.account.service.IAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,29 +15,38 @@ import java.util.UUID;
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
 public class AccountController {
+
     private IAccountService accountService;
     @GetMapping("/{Id}")
-    public ResponseEntity<Account> getById (
-            @PathVariable String Id
+    public ResponseEntity<AccountResponse> getById (
+            @PathVariable UUID Id
     ) {
         try {
-            return ResponseEntity.ok(accountService.findById(UUID.fromString(Id)));
+            Account account = accountService.findById(Id);
+            AccountResponse response = AccountResponse.builder()
+                    .id(String.valueOf(account.getId()))
+                    .username(account.getUsername())
+                    .gender(account.getGender().name())
+                    .age(account.getAge())
+                    .createdAt(account.getCreatedAt().toString())
+                    .build();
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
     @PostMapping("")
-    public ResponseEntity<Account> post (
+    public ResponseEntity<AccountResponse> post (
             @Valid
             @RequestBody AccountRequest accountRequest
-    ) {}
-    @PutMapping("/{Id}") ResponseEntity<Account> put (
-            @PathVariable String Id,
+    ) {return null;}
+    @PutMapping("/{Id}") ResponseEntity<AccountResponse> put (
+            @PathVariable UUID Id,
             @Valid
             @RequestBody AccountRequest accountRequest
-    ) {}
+    ) {return null;}
     @DeleteMapping("/{Id}") ResponseEntity<Void> delete (
-            @PathVariable String Id
+            @PathVariable UUID Id
     )
-    {}
+    {return null;}
 }

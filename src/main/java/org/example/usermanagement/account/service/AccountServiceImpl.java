@@ -3,6 +3,7 @@ package org.example.usermanagement.account.service;
 import lombok.RequiredArgsConstructor;
 import org.example.usermanagement.account.domain.Account;
 import org.example.usermanagement.account.infrastructure.IAccountRepository;
+import org.example.usermanagement.account.presentation.AccountResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -12,8 +13,9 @@ import java.util.UUID;
 public class AccountServiceImpl implements IAccountService {
     private IAccountRepository accountRepository;
     @Override
-    public void save(Account account) {
+    public Account save(Account account) {
         // Save account
+        return null;
     }
 
     @Override
@@ -25,10 +27,12 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public void delete(UUID id) {
         // Delete account by id
+
     }
 
     @Override
-    public void update(Account account) {
+    public Account update(Account account) {
         // Update account
+        return null;
     }
 }
