@@ -6,8 +6,8 @@ import org.example.usermanagement.account.presentation.AccountRequest;
 import java.util.UUID;
 
 public interface IAccountService {
-    Account save(AccountRequest account);
+    Account create(AccountRequest account);
     Account findById(UUID id);
     void delete(UUID id);
-    Account update(AccountRequest account);
+    Account update(UUID id, AccountRequest newAccount);
 }
