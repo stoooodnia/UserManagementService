@@ -28,7 +28,6 @@ public class AccountServiceImpl implements IAccountService {
                 .gender(Gender.valueOf(req.getGender()))
                 .createdAt(new Timestamp(System.currentTimeMillis()))
                 .build();
-
         return accountRepository.save(account);
     }
 
